@@ -43,6 +43,13 @@ struct FileRowView: View {
                                 .padding(.horizontal, 4)
                                 .padding(.vertical, 2)
                                 .background(Color.orange.opacity(0.8), in: RoundedRectangle(cornerRadius: 3))
+                        } else {
+                            Text("AVFoundation")
+                                .font(.caption2)
+                                .foregroundStyle(.white)
+                                .padding(.horizontal, 4)
+                                .padding(.vertical, 2)
+                                .background(Color.blue.opacity(0.8), in: RoundedRectangle(cornerRadius: 3))
                         }
                         Image(systemName: "checkmark.circle.fill")
                             .font(.title3)
