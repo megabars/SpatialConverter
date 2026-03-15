@@ -29,6 +29,7 @@
 		AA0000000000000000000034 /* SettingsPanel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000021 /* SettingsPanel.swift */; };
 		AA0000000000000000000035 /* ProgressRingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000022 /* ProgressRingView.swift */; };
 		AA0000000000000000000036 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = AA0000000000000000000025 /* Assets.xcassets */; };
+		AA000000000000000000003B /* MP4SpatialTagWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = AA000000000000000000003A /* MP4SpatialTagWriter.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +48,7 @@
 		AA0000000000000000000019 /* SBSEncoder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SBSEncoder.swift; sourceTree = "<group>"; };
 		AA000000000000000000001A /* ConversionPipeline.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionPipeline.swift; sourceTree = "<group>"; };
 		AA000000000000000000001B /* FFmpegFallback.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FFmpegFallback.swift; sourceTree = "<group>"; };
+		AA000000000000000000003A /* MP4SpatialTagWriter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MP4SpatialTagWriter.swift; sourceTree = "<group>"; };
 		AA000000000000000000001C /* ConversionQueue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConversionQueue.swift; sourceTree = "<group>"; };
 		AA000000000000000000001D /* SpatialVideoValidator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpatialVideoValidator.swift; sourceTree = "<group>"; };
 		AA000000000000000000001E /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -111,6 +113,7 @@
 				AA0000000000000000000019 /* SBSEncoder.swift */,
 				AA000000000000000000001A /* ConversionPipeline.swift */,
 				AA000000000000000000001B /* FFmpegFallback.swift */,
+				AA000000000000000000003A /* MP4SpatialTagWriter.swift */,
 				55A262832F67180400B96A3B /* Assets.xcassetsContents.json */,
 				55A262852F67180A00B96A3B /* Assets.xcassetsAppIcon.appiconsetContents.json */,
 				55A262872F67183200B96A3B /* README.md */,
@@ -240,6 +243,7 @@
 				AA0000000000000000000033 /* FileRowView.swift in Sources */,
 				AA0000000000000000000034 /* SettingsPanel.swift in Sources */,
 				AA0000000000000000000035 /* ProgressRingView.swift in Sources */,
+				AA000000000000000000003B /* MP4SpatialTagWriter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
