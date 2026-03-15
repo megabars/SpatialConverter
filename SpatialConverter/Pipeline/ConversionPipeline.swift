@@ -77,7 +77,7 @@ actor ConversionPipeline {
             throw ConversionError.cancelled
         } catch {
             // Other AVFoundation errors → also try ffmpeg
-            await MainActor.run { 
+            await MainActor.run {
                 job.usedFallback = true
                 job.conversionMethod = "ffmpeg"
             }
@@ -86,6 +86,10 @@ actor ConversionPipeline {
                 settings: settings, progress: progress
             )
         }
+
+        // 5. Inject YouTube VR metadata (st3d + GSpherical uuid) into the output MP4.
+        // Failure is non-fatal: the file is still a valid SBS video without the tag.
+        try? MP4SpatialTagWriter.inject(into: outputURL)
     }
 
     // MARK: - AVFoundation path
