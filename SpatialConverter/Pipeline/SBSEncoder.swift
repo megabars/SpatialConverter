@@ -96,6 +96,30 @@ actor SBSEncoder {
 
         writer.shouldOptimizeForNetworkUse = true // faststart equivalent
 
+        // ── Spherical/VR XMP metadata (YouTube VR recognition) ───────────────
+        let xmp = """
+        <?xpacket begin="\u{FEFF}" id="W5M0MpCehiHzreSzNTczkc9d"?>
+        <x:xmpmeta xmlns:x="adobe:ns:meta/">
+          <rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+            <rdf:Description rdf:about=""
+                xmlns:GSpherical="http://ns.google.com/videos/1.0/spherical/">
+              <GSpherical:Spherical>true</GSpherical:Spherical>
+              <GSpherical:Stitched>true</GSpherical:Stitched>
+              <GSpherical:ProjectionType>equirectangular</GSpherical:ProjectionType>
+              <GSpherical:StereoMode>left-right</GSpherical:StereoMode>
+            </rdf:Description>
+          </rdf:RDF>
+        </x:xmpmeta>
+        <?xpacket end="w"?>
+        """
+        if let xmpData = xmp.data(using: .utf8) {
+            let xmpItem = AVMutableMetadataItem()
+            xmpItem.keySpace = .quickTimeUserData
+            xmpItem.key = "XMP_" as NSString
+            xmpItem.value = xmpData as NSData
+            writer.metadata = [xmpItem]
+        }
+
         return EncoderSession(
             writer: writer,
             videoInput: videoInput,
