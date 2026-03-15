@@ -49,6 +49,11 @@ enum MP4SpatialTagWriter {
                 data.writeUInt32BE(data.readUInt32BE(at: ancestorStart) + delta, at: ancestorStart)
             }
 
+            // moov sits before mdat (faststart). Inserting bytes inside moov shifts mdat
+            // by `delta`, so every chunk offset in every stco/co64 box must be incremented.
+            let newMoovEnd = moov.start + Int(data.readUInt32BE(at: moov.start))
+            fixChunkOffsets(in: &data, from: moov.bodyStart, to: newMoovEnd, delta: delta)
+
             try data.write(to: url)
             return
         }
@@ -125,6 +130,46 @@ enum MP4SpatialTagWriter {
             offset += size
         }
         return nil
+    }
+
+    // MARK: - Chunk offset fix
+
+    /// Recursively scans container boxes and increments every entry in `stco`/`co64` by `delta`.
+    /// Required after inserting bytes into moov (which precedes mdat): mdat shifts by delta,
+    /// but stored chunk offsets still point to pre-insertion positions.
+    private static func fixChunkOffsets(in data: inout Data, from: Int, to: Int, delta: UInt32) {
+        var offset = from
+        while offset + 8 <= to {
+            let size = Int(data.readUInt32BE(at: offset))
+            guard size >= 8, offset + size <= to else { break }
+            let type = data.readFourCC(at: offset + 4)
+
+            switch type {
+            case "stco":
+                // FullBox: version(1)+flags(3)+entry_count(4) then 4-byte offsets
+                let count = Int(data.readUInt32BE(at: offset + 12))
+                for i in 0..<count {
+                    let p = offset + 16 + i * 4
+                    data.writeUInt32BE(data.readUInt32BE(at: p) + delta, at: p)
+                }
+            case "co64":
+                // FullBox: version(1)+flags(3)+entry_count(4) then 8-byte offsets
+                let count = Int(data.readUInt32BE(at: offset + 12))
+                for i in 0..<count {
+                    let p = offset + 16 + i * 8
+                    let hi = UInt64(data.readUInt32BE(at: p))
+                    let lo = UInt64(data.readUInt32BE(at: p + 4))
+                    let newVal = (hi << 32 | lo) + UInt64(delta)
+                    data.writeUInt32BE(UInt32(newVal >> 32), at: p)
+                    data.writeUInt32BE(UInt32(newVal & 0xFFFFFFFF), at: p + 4)
+                }
+            case "trak", "mdia", "minf", "stbl", "edts", "udta", "dinf", "meta", "mvex", "moof", "traf":
+                fixChunkOffsets(in: &data, from: offset + 8, to: offset + size, delta: delta)
+            default:
+                break
+            }
+            offset += size
+        }
     }
 
     /// Returns true if the `mdia` box belongs to a video track (hdlr handler_type == "vide").
